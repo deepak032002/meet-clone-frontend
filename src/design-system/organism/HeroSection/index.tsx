@@ -1,10 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   meetingCode: z
@@ -43,31 +52,39 @@ const HeroSection: React.FC = () => {
             </p>
           </div>
           <div className="flex w-1/2">
-            <form
-              {...form}
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-full gap-2"
-            >
-              <Input
-                type="text"
-                placeholder="Meeting Code..."
-                className="h-full w-full focus-visible:ring-0 focus:outline-0 dark:bg-white dark:text-black dark:focus-visible:outline-0 dark:focus-visible:ring-0 focus-visible:ring-offset-0"
-                {...form.register("meetingCode")}
-              />
-              <Button
-                type="submit"
-                className="inline-flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 hover:bg-gradient-to-tr active:bg-gradient-to-br duration-150 gap-2 dark:text-white text-lg font-semibold py-3 px-6 rounded-r-md h-full"
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex w-full gap-2"
               >
-                Join Meeting
-              </Button>
-            </form>
-          </div>
-          <div className="text-left w-1/2">
-            {form.formState.errors.meetingCode && (
-              <p className="text-red-600 text-sm">
-                {form.formState.errors.meetingCode.message}
-              </p>
-            )}
+                <FormField
+                  control={form.control}
+                  name="meetingCode"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormControl>
+                        <>
+                          <Input
+                            type="text"
+                            placeholder="Meeting Code..."
+                            className="h-full w-full focus-visible:ring-0 focus:outline-0 dark:bg-white dark:text-black dark:focus-visible:outline-0 dark:focus-visible:ring-0 focus-visible:ring-offset-0"
+                            {...field}
+                          />
+                          <FormMessage className="text-red-500 text-xs" />
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  className="inline-flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 hover:bg-gradient-to-tr active:bg-gradient-to-br duration-150 gap-2 dark:text-white text-lg font-semibold py-3 px-6 rounded-r-md h-full"
+                >
+                  Join Meeting
+                </Button>
+              </form>
+            </Form>
           </div>
         </div>
       </div>

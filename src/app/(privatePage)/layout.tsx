@@ -1,6 +1,4 @@
-import useAuthorizeUser from "@/hooks/api-hooks/useAuthorizeUser";
-import { cookies } from "next/headers";
-import { permanentRedirect } from "next/navigation";
+import { getMe } from "@/lib/action";
 import React from "react";
 
 export default function PrivateLayout({
@@ -8,10 +6,5 @@ export default function PrivateLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = cookies().get("token");
-  if (!token) {
-    permanentRedirect("/login");
-  }
-
   return <>{children}</>;
 }

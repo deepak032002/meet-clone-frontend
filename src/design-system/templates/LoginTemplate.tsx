@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useGlobalContext } from "@/context/GlobalContext";
+import { login } from "@/lib/action";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -44,34 +45,36 @@ const LoginTemplate = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof formSchema>) =>
-      axiosInstance.post("/user/login", data),
+      login(data.email, data.password),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate(values, {
-      onSuccess: (data) => {
-        form.reset();
-        toast.success("Login successful");
-        setCookie("token", data.data.data.token, {
-          expires: moment().add(1, "days").toDate(),
-        });
-        router.push("/");
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          setData((prev) => ({ ...prev, email: values.email }));
-          if (error.response?.status === 403) {
-            router.push("/verify-email");
-          }
-          toast.error(error.response?.data.message);
-        }
-      },
-    });
+    // mutate(values, {
+    //   onSuccess: (data) => {
+    //     form.reset();
+    //     toast.success("Login successful");
+    //     setCookie("token", data.data.data.token, {
+    //       expires: moment().add(1, "days").toDate(),
+    //     });
+    //     router.push("/");
+    //   },
+    //   onError: (error) => {
+    //     if (error instanceof AxiosError) {
+    //       setData((prev) => ({ ...prev, email: values.email }));
+    //       if (error.response?.status === 403) {
+    //         router.push("/verify-email");
+    //       }
+    //       toast.error(error.response?.data.message);
+    //     }
+    //   },
+    // });
+
+    login(values.email, values.password);
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
-      <div className="relative bg-white dark:bg-neutral-900 rounded-lg shadow">
+    <div className="h-full flex justify-center items-center">
+      <div className="relative bg-white dark:bg-neutral-900 rounded-lg shadow sm:w-[500px] w-full">
         <div className="p-5">
           <h3 className="text-2xl mb-0.5 font-medium"></h3>
           <p className="mb-4 text-sm font-normal text-gray-800"></p>
@@ -81,23 +84,12 @@ const LoginTemplate = () => {
               Login to your account
             </p>
             <p className="mt-2 text-sm leading-4 text-neutral-600">
-              You must be logged in to perform this action.
+              Login to your account to get start
             </p>
           </div>
 
           <div className="mt-7 flex flex-col gap-2">
-            <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-neutral-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
-              <Image
-                src="https://www.svgrepo.com/show/512317/github-142.svg"
-                alt="GitHub"
-                className="h-[18px] w-[18px]"
-                width={32}
-                height={32}
-              />
-              Continue with GitHub
-            </button>
-
-            <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-neutral-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
+            <Button className="gap-2" variant="outline">
               <Image
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
@@ -106,24 +98,13 @@ const LoginTemplate = () => {
                 height={32}
               />
               Continue with Google
-            </button>
-
-            <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-neutral-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
-              <Image
-                src="https://www.svgrepo.com/show/448234/linkedin.svg"
-                alt="Google"
-                className="h-[18px] w-[18px]"
-                width={32}
-                height={32}
-              />
-              Continue with LinkedIn
-            </button>
+            </Button>
           </div>
 
           <div className="flex w-full items-center gap-2 py-6 text-sm text-neutral-600">
-            <div className="h-px w-full bg-neutral-200"></div>
+            <div className="h-px w-full bg-neutral-200 dark:bg-neutral-700"></div>
             OR
-            <div className="h-px w-full bg-neutral-200"></div>
+            <div className="h-px w-full bg-neutral-200 dark:bg-neutral-700"></div>
           </div>
 
           <Form {...form}>
@@ -145,7 +126,7 @@ const LoginTemplate = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-500 text-xs" />
                   </FormItem>
                 )}
               />
@@ -163,7 +144,7 @@ const LoginTemplate = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-500 text-xs" />
                   </FormItem>
                 )}
               />

@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CiLogout, CiUser } from "react-icons/ci";
+import toast from "react-hot-toast";
 
 import {
   DropdownMenu,
@@ -12,13 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUserContext } from "@/context/UserContext";
-import { deleteCookie } from "cookies-next";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { logout } from "@/lib/action";
 
 const UserDropDown = () => {
   const { user, setUser } = useUserContext();
-  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus-visible:outline-none dark:focus-visible:outline-none">
@@ -37,17 +35,18 @@ const UserDropDown = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {user?.firstName + " " + user?.lastName}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <CiUser className="me-2 text-xl" /> Profile
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            deleteCookie("token");
-            toast.success("Logout Successful");
+            toast.success("Logout successful");
+            logout();
             setUser(null);
-            router.push("/login");
           }}
         >
           <CiLogout className="me-2 text-xl" /> Logout

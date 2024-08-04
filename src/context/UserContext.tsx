@@ -6,6 +6,7 @@ import {
   FC,
   useContext,
   useState,
+  useEffect,
 } from "react";
 
 interface UserContextProps {
@@ -15,8 +16,20 @@ interface UserContextProps {
 
 const UserContext = createContext<UserContextProps>({} as UserContextProps);
 
-export const UserContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+interface UserContextProviderProps extends PropsWithChildren {
+  userData: User | null;
+}
+
+export const UserContextProvider: FC<UserContextProviderProps> = ({
+  children,
+  userData,
+}) => {
+  const [user, setUser] = useState<User | null>(userData);
+
+  useEffect(() => {
+    if (!userData) return;
+    setUser(userData);
+  }, [userData]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

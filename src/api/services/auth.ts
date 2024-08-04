@@ -1,16 +1,6 @@
-import { getCookie } from "cookies-next";
-import axiosInstance from "../axios.config";
-import { cookies, headers } from "next/headers";
+import axiosInstance from "@/api/axios.config";
+import cookies from "cookies-next";
 
-export const getMe = async () => {
-  try {
-    return await axiosInstance.get("/user/me", {
-      headers: {
-        Authorization: `Bearer ${cookies().get("token")?.value}`,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+export const getPreSignedUrl = async () => {
+  return axiosInstance.get<{ data: { url: string } }>("/user/upload-image");
 };

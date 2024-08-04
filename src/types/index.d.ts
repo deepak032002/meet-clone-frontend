@@ -5,6 +5,7 @@ type User = {
   image: string | null;
   isVerified: boolean;
   mobile: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   updatedAt: string;
 };

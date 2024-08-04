@@ -99,7 +99,7 @@ const VerifyEmailTemplate = () => {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
+    <div className="h-full flex justify-center items-center">
       <div className="relative bg-white dark:bg-neutral-900 rounded-lg shadow">
         <div className="p-5">
           <h3 className="text-2xl mb-0.5 font-medium"></h3>

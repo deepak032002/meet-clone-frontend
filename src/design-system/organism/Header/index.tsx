@@ -7,6 +7,7 @@ import { useUserContext } from "@/context/UserContext";
 import UserDropDown from "@/design-system/molecules/UserDropDown";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import ThemeSwitch from "@/design-system/atom/ThemeSwitch";
 
 const audioWide = Audiowide({ subsets: ["latin"], weight: "400" });
 
@@ -37,6 +38,8 @@ const Header = () => {
                 <Link href="/login">Login</Link>
               </Button>
             )}
+
+            <ThemeSwitch />
 
             {user && <UserDropDown />}
           </div>

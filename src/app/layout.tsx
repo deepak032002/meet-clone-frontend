@@ -9,6 +9,7 @@ import Header from "@/design-system/organism/Header";
 import QueryProvider from "@/context/QueryProvider";
 import { GlobalContextProvider } from "@/context/GlobalContext";
 import { UserContextProvider } from "@/context/UserContext";
+import { getMe } from "@/lib/action";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -20,16 +21,18 @@ export const metadata: Metadata = {
   description: "Connect with your geeks",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data = await getMe();
+
   return (
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased bg-[url('/2.webp')] bg-cover bg-no-repeat",
+          "bg-[#ededed] dark:bg-[#1c1c1c] font-sans antialiased",
           fontSans.variable
         )}
       >
@@ -43,7 +46,7 @@ export default function RootLayout({
           <Toaster />
           <QueryProvider>
             <GlobalContextProvider>
-              <UserContextProvider>
+              <UserContextProvider userData={data.data.user}>
                 <Header />
                 {children}
               </UserContextProvider>
